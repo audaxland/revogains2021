@@ -8,7 +8,6 @@ const getFileStatistics = data => {
         Months: {},
         Duration: {},
     }
-    console.log('data', data);
     data.forEach(row => {
         if (typeof stats.Currency[row.Currency] === 'undefined') {
             stats.Currency[row.Currency] = 0;

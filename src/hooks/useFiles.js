@@ -1,12 +1,16 @@
 import {useEffect, useState} from "react";
 import readCsvFile from "../lib/readCsvFile";
 import getFileStatistics from '../lib/getFileStatistics';
+import matchExchanges from "../lib/matchExchanges";
 
 const useFiles = () => {
     const [uploads, setUploads] = useState([]);
     const [uploadsMeta, setUploadsMeta] = useState([]);
     const [statistics, setStatistics] = useState([]);
     const [exchanges, setExchanges] = useState([]);
+    const [paired, setPaired] = useState([]);
+    const [orphans, setOrphans] = useState([]);
+    const [unProcessed, setUnProcessed] = useState([]);
 
     useEffect(() => {
         setUploadsMeta(uploads.map(({lastModified, name, size, type}) => ({...{lastModified, name, size, type}})))
@@ -14,7 +18,6 @@ const useFiles = () => {
 
     const addUpload = async newUpload => {
         try {
-            console.log(newUpload);
             if (newUpload.name.slice(-4).toLowerCase() !== '.csv') {
                 return 'Only CSV files allowed';
             }
@@ -40,8 +43,15 @@ const useFiles = () => {
         return true;
     }
 
+    useEffect(() => {
+        const {orphans, pairs, unProcessed} = matchExchanges(exchanges);
+        setOrphans(orphans);
+        setPaired(pairs);
+        setUnProcessed(unProcessed)
+    }, [exchanges]);
+
     return {
-        uploads, addUpload, uploadsMeta, statistics, exchanges
+        uploads, addUpload, uploadsMeta, statistics, exchanges, paired, orphans, unProcessed
     }
 }
 
