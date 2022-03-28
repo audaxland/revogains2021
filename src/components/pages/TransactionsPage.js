@@ -1,6 +1,7 @@
-import {Alert, Box, Paper, Typography} from "@mui/material";
+import {Alert, Paper} from "@mui/material";
 import ExchangeGrid from "../grids/ExchangeGrid";
 import {useEffect, useState} from "react";
+import PaperBoxAlert from "../layout/PaperBoxAlert";
 
 
 const TransactionsPage = ({files}) => {
@@ -36,35 +37,26 @@ const TransactionsPage = ({files}) => {
 
     return (
         <>
-            <Paper sx={{padding: '1em', marginBottom: '1em'}}>
-                <Typography variant='subtitle1'>
-                    Orphan Transactions {!!orphans.length ? '(' + orphans.length + ')' : ''}
-                </Typography>
-                <Box>
-                    {(!orphans.length) && <Alert severity='info'>No orphans</Alert>}
-                    {(!!orphans.length) && <ExchangeGrid exchanges={orphans} />}
-                </Box>
-            </Paper>
+            <PaperBoxAlert
+                title={'Orphan Transactions ' + (!!orphans.length ? '(' + orphans.length + ')' : '')}
+                info={orphans.length ? '' : 'No orphans'}
+            >
+                {(!!orphans.length) && <ExchangeGrid exchanges={orphans} />}
+            </PaperBoxAlert>
 
-            <Paper sx={{padding: '1em', marginBottom: '1em'}}>
-                <Typography variant='subtitle1'>
-                    Paired Transactions {!!paired.length ? '(' + paired.length + ')' : ''}
-                </Typography>
-                <Box>
-                    {(!paired.length) && <Alert severity='info'>No pairs</Alert>}
-                    {(!!paired.length) && <ExchangeGrid exchanges={expandPairs} extra={[{field: 'groupId'}]}/>}
-                </Box>
-            </Paper>
+            <PaperBoxAlert
+                title={'Paired Transactions ' + (!!paired.length ? '(' + paired.length + ')' : '')}
+                info={paired.length ? '' : 'No pairs'}
+            >
+                {(!!paired.length) && <ExchangeGrid exchanges={expandPairs} extra={[{field: 'groupId'}]}/>}
+            </PaperBoxAlert>
 
-            <Paper sx={{padding: '1em', marginBottom: '1em'}}>
-                <Typography variant='subtitle1'>
-                    Unprocessed Transactions {!!expandUnProcessed.length ? '(' + expandUnProcessed.length + ')' : ''}
-                </Typography>
-                <Box>
-                    {(!expandUnProcessed.length) && <Alert severity='info'>No UnProcessed Transactions</Alert>}
-                    {(!!expandUnProcessed.length) && <ExchangeGrid exchanges={expandUnProcessed} extra={[{field: 'groupId'}]}/>}
-                </Box>
-            </Paper>
+            <PaperBoxAlert
+                title={'Unprocessed Transactions ' + (!!expandUnProcessed.length ? '(' + expandUnProcessed.length + ')' : '')}
+                info={expandUnProcessed.length ? '' : 'No UnProcessed Transactions'}
+            >
+                {(!!expandUnProcessed.length) && <ExchangeGrid exchanges={expandUnProcessed} extra={[{field: 'groupId'}]}/>}
+            </PaperBoxAlert>
         </>
     );
 }

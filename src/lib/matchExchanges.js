@@ -22,6 +22,15 @@ const currencyCount = group => {
     return {currencyObject, currencyArray};
 }
 
+const makePair = (first, second) => {
+    const firstRate = Math.abs(Number(second.Amount)) / Math.abs(Number(first.Amount));
+    const secondRate = Math.abs(Number(first.Amount)) / Math.abs(Number(second.Amount));
+    return ({
+        [first.Currency]: {...first, Rate: firstRate},
+        [second.Currency]: {...second, Rate: secondRate},
+    })
+}
+
 
 const processTime = timeGroup => {
     const result = {
@@ -39,7 +48,7 @@ const processTime = timeGroup => {
 
     // the most common case is exactly 2 exchanges of different currencies
     if ((timeGroup.length === 2) && (currencyArray.length === 2)) {
-        result.pairs.push({[timeGroup[0].Currency]: timeGroup[0], [timeGroup[1].Currency]: timeGroup[1]});
+        result.pairs.push(makePair(timeGroup[0], timeGroup[1]));
         return result;
     }
 
@@ -49,16 +58,11 @@ const processTime = timeGroup => {
         const [a,b] = Object.keys(sorted).map(currency => sorted[currency]);
         const pairs = a.map((item, aIndex) => {
             const bIndex = b.length - 1 - aIndex;
-            return {
-                [item.Currency]: item,
-                [b[bIndex].Currency]: b[bIndex],
-            };
+            return makePair(item, b[bIndex]);
         });
         result.pairs.push(...pairs);
         return result;
     }
-
-
     result.unProcessed = [timeGroup];
     return result;
 }

@@ -1,30 +1,26 @@
-import {useEffect, useState, useRef, useCallback} from "react";
+import {useState, useRef, useCallback} from "react";
 import { AgGridReact } from 'ag-grid-react';
 
 
-const ExchangeGrid = ({exchanges, extra = []}) => {
+const SalesGrid = ({salesDetails}) => {
     const gridRef = useRef();
     const initialColumns = [
-        { field: 'Currency'},
-        { field: 'Amount'},
-        { field: 'Fee'},
-        { field: 'Balance'},
-        { field: 'file'},
-        { field: 'Completed Date'},
-        { field: 'Description'},
-        { field: 'State'},
-        { field: 'Started Date'},
-        { field: 'Product'},
-        { field: 'Type'},
-
-        { field: 'Rate'}
+        { field: 'currency'},
+        { field: 'sold'},
+        { field: 'soldAt'},
+        { field: 'cost'},
+        { field: 'gain'},
+        {
+            field: 'purchaseDates',
+            cellRenderer: props => props.value.join(', '),
+        },
+        { field: 'saleDate'},
+        { field: 'gainsToDate'},
+        { field: 'soldToDate'},
     ];
 
-    const [columnDefs, setColumnDefs] = useState(initialColumns);
+    const [columnDefs] = useState(initialColumns);
 
-    useEffect(() => {
-        setColumnDefs([...extra, ...initialColumns]);
-    }, []);
 
     const [defaultColDef] = useState({
         filter: 'agTextColumnFilter',
@@ -51,7 +47,7 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
 
                 <AgGridReact
                     ref={gridRef}
-                    rowData={exchanges}
+                    rowData={salesDetails}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
                     onGridReady={onGridReady}
@@ -63,4 +59,4 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
     );
 };
 
-export default ExchangeGrid;
+export default SalesGrid;

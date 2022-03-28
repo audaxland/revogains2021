@@ -1,6 +1,6 @@
-import {Alert, Paper, Typography, Box} from "@mui/material";
 import {useState} from "react";
 import FilesGrid from "../grids/FilesGrid";
+import PaperBoxAlert from "../layout/PaperBoxAlert";
 
 
 
@@ -16,27 +16,20 @@ const FilesPage = ({files}) => {
     }
     return (
         <>
-            <Paper sx={{padding: '1em', marginBottom: '1em'}}>
-                <Typography variant='subtitle1'>
-                    Add a New File
-                </Typography>
-                {(!!error) && <Alert severity='error'>{error}</Alert>}
-                <Box sx={{padding: '1em'}}>
-                    <input type="file" onChange={newFile}/>
-                </Box>
-            </Paper>
-
-            <Paper sx={{padding: '1em', marginBottom: '1em'}}>
-                <Typography variant='subtitle1'>
-                    Current Files
-                </Typography>
-                <Box>
-                    {(!uploadsMeta.length) && <Alert severity='info'>No files yet!</Alert>}
-                    {(!!uploadsMeta.length) && <FilesGrid uploadsMeta={uploadsMeta} />}
-                </Box>
-            </Paper>
+            <PaperBoxAlert
+                title='Add a New File'
+                error={error ? error : ''}
+            >
+                <input type="file" onChange={newFile}/>
+            </PaperBoxAlert>
 
 
+            <PaperBoxAlert
+                title='Current Files'
+                info={uploadsMeta.length ? '' : 'No files yet!'}
+            >
+                {(!!uploadsMeta.length) && <FilesGrid uploadsMeta={uploadsMeta} />}
+            </PaperBoxAlert>
         </>
     );
 };

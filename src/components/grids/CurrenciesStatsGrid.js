@@ -2,28 +2,23 @@ import {useEffect, useState, useRef, useCallback} from "react";
 import { AgGridReact } from 'ag-grid-react';
 
 
-const ExchangeGrid = ({exchanges, extra = []}) => {
+const CurrenciesStatsGrid = ({currenciesStatus}) => {
     const gridRef = useRef();
     const initialColumns = [
-        { field: 'Currency'},
-        { field: 'Amount'},
-        { field: 'Fee'},
-        { field: 'Balance'},
-        { field: 'file'},
-        { field: 'Completed Date'},
-        { field: 'Description'},
-        { field: 'State'},
-        { field: 'Started Date'},
-        { field: 'Product'},
-        { field: 'Type'},
-
-        { field: 'Rate'}
+        { field: 'currency' },
+        { field: 'gains' },
+        { field: 'balance' },
+        { field: 'purchased' },
+        { field: 'fees' },
+        { field: 'sold' },
+        { field: 'purchaseCount' },
+        { field: 'salesCount' },
     ];
 
     const [columnDefs, setColumnDefs] = useState(initialColumns);
 
     useEffect(() => {
-        setColumnDefs([...extra, ...initialColumns]);
+        setColumnDefs(initialColumns);
     }, []);
 
     const [defaultColDef] = useState({
@@ -47,11 +42,11 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
     return (
         <>
             <button onClick={resize} style={{width: '100%'}}>Auto Resize</button>
-            <div className="ag-theme-alpine" style={{height: '75vh'}}>
+            <div className="ag-theme-alpine" style={{height: 68 + (currenciesStatus.length * 41),}}>
 
                 <AgGridReact
                     ref={gridRef}
-                    rowData={exchanges}
+                    rowData={currenciesStatus}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
                     onGridReady={onGridReady}
@@ -63,4 +58,4 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
     );
 };
 
-export default ExchangeGrid;
+export default CurrenciesStatsGrid;

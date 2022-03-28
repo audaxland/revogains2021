@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import readCsvFile from "../lib/readCsvFile";
 import getFileStatistics from '../lib/getFileStatistics';
 import matchExchanges from "../lib/matchExchanges";
+import mapGains from "../lib/mapGains";
+import {referenceCurrency} from "../appConfig";
 
 const useFiles = () => {
     const [uploads, setUploads] = useState([]);
@@ -11,6 +13,7 @@ const useFiles = () => {
     const [paired, setPaired] = useState([]);
     const [orphans, setOrphans] = useState([]);
     const [unProcessed, setUnProcessed] = useState([]);
+    const [gainMap, setGainMap] = useState({map: [], rejected: []});
 
     useEffect(() => {
         setUploadsMeta(uploads.map(({lastModified, name, size, type}) => ({...{lastModified, name, size, type}})))
@@ -50,8 +53,13 @@ const useFiles = () => {
         setUnProcessed(unProcessed)
     }, [exchanges]);
 
+    useEffect(() => {
+        setGainMap(mapGains(paired, referenceCurrency));
+
+    }, [paired]);
+
     return {
-        uploads, addUpload, uploadsMeta, statistics, exchanges, paired, orphans, unProcessed
+        uploads, addUpload, uploadsMeta, statistics, exchanges, paired, orphans, unProcessed, gainMap
     }
 }
 

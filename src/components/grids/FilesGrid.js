@@ -10,12 +10,19 @@ const FilesGrid = ({uploadsMeta}) => {
         { field: 'type', flex: 1 }
     ]);
 
+    const [defaultColDef] = useState({
+        filter: 'agTextColumnFilter',
+        sortable: true,
+        resizable: true,
+    });
+
     return (
-        <div className="ag-theme-alpine" style={{height: 75 + (uploadsMeta.length * 40), width: '100%'}}>
+        <div className="ag-theme-alpine" style={{height: 68 + (uploadsMeta.length * 41), width: '100%'}}>
             <AgGridReact
                 rowData={uploadsMeta}
-                columnDefs={columnDefs}>
-            </AgGridReact>
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+            />
         </div>
     );
 };
