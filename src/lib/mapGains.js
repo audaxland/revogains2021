@@ -75,6 +75,7 @@ const mapGains = (paired, referenceCurrency) => {
             let cursor = map[currency].cursor;
 
             let amount = -Number(crypto.Amount) + Number(crypto.Fee);
+            let floatIncertitude = amount / 1000000000;
 
             // find all the purchases for this sale
             const purchases = [];
@@ -83,13 +84,13 @@ const mapGains = (paired, referenceCurrency) => {
                     rejected.push({pair, error: 'Missing purchase'});
                     return;
                 }
-                if (amount <= map[currency].purchases[cursor].remaining) {
+                if (amount <= map[currency].purchases[cursor].remaining + floatIncertitude){
                     purchases.push({
                         purchaseId: cursor,
                         amount: amount,
                         pairId: map[currency].purchases[cursor].pairId
                     });
-                    if (Number(amount) === Number(map[currency].purchases[cursor].remaining)) {
+                    if (Math.abs(Number(amount) - Number(map[currency].purchases[cursor].remaining)) < floatIncertitude) {
                         cursor++;
                     }
                     amount = 0;

@@ -49,7 +49,7 @@ const GainsPage = ({files}) => {
                     currency,
                     sold,
                     soldAt,
-                    soldToDate,
+                    soldToDate: cleanFloat(soldToDate),
                     cost,
                     gain,
                     gainsToDate,
