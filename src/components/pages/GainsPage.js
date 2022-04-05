@@ -32,6 +32,7 @@ const GainsPage = ({files}) => {
         })));
 
         const allGains = [];
+        const YTD = {};
 
         Object.keys(gainMap.map).forEach(currency => {
             gainMap.map[currency].sales.forEach(({
@@ -45,6 +46,18 @@ const GainsPage = ({files}) => {
                                                      saleDate
 
             }) => {
+                if (typeof YTD[currency] === 'undefined') {
+                    YTD[currency] = {};
+                }
+                const year = saleDate.substring(0,4);
+                if (typeof YTD[currency][year] === 'undefined') {
+                    YTD[currency][year] = {
+                        sold: 0.0,
+                        gain: 0.0,
+                    }
+                }
+                YTD[currency][year].sold += sold;
+                YTD[currency][year].gain += gain;
                 allGains.push({
                     currency,
                     sold,
@@ -54,7 +67,9 @@ const GainsPage = ({files}) => {
                     gain,
                     gainsToDate,
                     purchaseDates,
-                    saleDate
+                    saleDate,
+                    soldYTD: cleanFloat(YTD[currency][year].sold),
+                    gainYTD: cleanFloat(YTD[currency][year].gain),
                 });
             });
         });

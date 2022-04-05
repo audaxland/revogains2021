@@ -10,6 +10,8 @@ const SalesGrid = ({salesDetails}) => {
         { field: 'soldAt'},
         { field: 'cost'},
         { field: 'gain'},
+        { field: 'soldYTD'},
+        { field: 'gainYTD'},
         {
             field: 'purchaseDates',
             cellRenderer: props => props.value.join(', '),
