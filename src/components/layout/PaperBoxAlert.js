@@ -5,10 +5,10 @@ const PaperBoxAlert = ({title = '', info = '', error = '', children}) => {
     return (
         <PaperBox title={title}>
             {(!!info) && (
-                <Alert severity='info'>{info}</Alert>
+                <Alert severity='info' sx={{marginBottom: '1em'}}>{info}</Alert>
             )}
             {(!!error) && (
-                <Alert severity='info'>{error}</Alert>
+                <Alert severity='info' sx={{marginBottom: '1em'}}>{error}</Alert>
             )}
             {children}
         </PaperBox>

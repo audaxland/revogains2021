@@ -50,6 +50,7 @@ const mapGains = (paired, referenceCurrency) => {
                 sold: 0.0,
                 gains: 0.0,
                 cursor: null,
+                referenceCurrency,
             };
         }
 

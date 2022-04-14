@@ -6,6 +6,7 @@ import {Paper, Box} from "@mui/material";
 import ExchangePage from "./pages/ExchangePage";
 import TransactionsPage from "./pages/TransactionsPage";
 import GainsPage from "./pages/GainsPage";
+import ExportsPage from "./pages/ExportPage/ExportsPage";
 
 const Router = ({page, files}) => {
     const currentPage = menuItems.find(item => item.toPage === page);
@@ -36,6 +37,7 @@ const Router = ({page, files}) => {
                 {(page === 'exchanges') && <ExchangePage files={files} />}
                 {(page === 'transactions') && <TransactionsPage files={files} />}
                 {(page === 'gains') && <GainsPage files={files} />}
+                {(page === 'exports') && <ExportsPage files={files} />}
             </Box>
 
         </Paper>

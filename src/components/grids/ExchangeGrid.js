@@ -1,5 +1,6 @@
-import {useEffect, useState, useRef, useCallback} from "react";
+import {useEffect, useState, useRef} from "react";
 import { AgGridReact } from 'ag-grid-react';
+import {resizeGrid} from "./gridHelper";
 
 
 const ExchangeGrid = ({exchanges, extra = []}) => {
@@ -32,21 +33,11 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
         resizable: true,
     });
 
-    const onGridReady = useCallback((params) => {
-
-    }, []);
-
-    const resize = () => {
-        const allColumnIds = [];
-        gridRef.current.columnApi.getAllColumns().forEach((column) => {
-            allColumnIds.push(column.getId());
-        });
-        gridRef.current.columnApi.autoSizeColumns(allColumnIds, true);
-    }
+    useEffect(() => resizeGrid(gridRef), [exchanges]);
 
     return (
         <>
-            <button onClick={resize} style={{width: '100%'}}>Auto Resize</button>
+            <button onClick={() => resizeGrid(gridRef)} style={{width: '100%'}}>Auto Resize</button>
             <div className="ag-theme-alpine" style={{height: '75vh'}}>
 
                 <AgGridReact
@@ -54,7 +45,6 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
                     rowData={exchanges}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
-                    onGridReady={onGridReady}
                     skipHeaderOnAutoSize={true}
                     enableCellTextSelection={true}
                 />

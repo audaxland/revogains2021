@@ -1,8 +1,9 @@
-import {useState, useRef, useCallback} from "react";
+import {useState, useRef, useCallback, useEffect} from "react";
 import { AgGridReact } from 'ag-grid-react';
+import {resizeGrid} from "./gridHelper";
 
 
-const SalesGrid = ({salesDetails}) => {
+const SalesGrid = ({salesList}) => {
     const gridRef = useRef();
     const initialColumns = [
         { field: 'currency'},
@@ -30,29 +31,18 @@ const SalesGrid = ({salesDetails}) => {
         resizable: true,
     });
 
-    const onGridReady = useCallback((params) => {
-
-    }, []);
-
-    const resize = () => {
-        const allColumnIds = [];
-        gridRef.current.columnApi.getAllColumns().forEach((column) => {
-            allColumnIds.push(column.getId());
-        });
-        gridRef.current.columnApi.autoSizeColumns(allColumnIds, true);
-    }
+    useEffect(() => resizeGrid(gridRef), [salesList]);
 
     return (
         <>
-            <button onClick={resize} style={{width: '100%'}}>Auto Resize</button>
+            <button onClick={e => resizeGrid(gridRef)} style={{width: '100%'}}>Auto Resize</button>
             <div className="ag-theme-alpine" style={{height: '75vh'}}>
 
                 <AgGridReact
                     ref={gridRef}
-                    rowData={salesDetails}
+                    rowData={salesList}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
-                    onGridReady={onGridReady}
                     skipHeaderOnAutoSize={true}
                     enableCellTextSelection={true}
                 />

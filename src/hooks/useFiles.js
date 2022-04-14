@@ -4,6 +4,7 @@ import getFileStatistics from '../lib/getFileStatistics';
 import matchExchanges from "../lib/matchExchanges";
 import mapGains from "../lib/mapGains";
 import {referenceCurrency} from "../appConfig";
+import makeSalesList from "../lib/makeSalesList";
 
 const useFiles = () => {
     const [uploads, setUploads] = useState([]);
@@ -13,7 +14,9 @@ const useFiles = () => {
     const [paired, setPaired] = useState([]);
     const [orphans, setOrphans] = useState([]);
     const [unProcessed, setUnProcessed] = useState([]);
-    const [gainMap, setGainMap] = useState({map: [], rejected: []});
+    const [gainMap, setGainMap] = useState({});
+    const [rejected, setRejected] = useState( []);
+    const [salesList, setSalesList] = useState([]);
 
     useEffect(() => {
         setUploadsMeta(uploads.map(({lastModified, name, size, type}) => ({...{lastModified, name, size, type}})))
@@ -54,12 +57,14 @@ const useFiles = () => {
     }, [exchanges]);
 
     useEffect(() => {
-        setGainMap(mapGains(paired, referenceCurrency));
-
+        const {map, rejected} = mapGains(paired, referenceCurrency)
+        setGainMap(map);
+        setRejected(rejected);
+        setSalesList(makeSalesList(map));
     }, [paired]);
 
     return {
-        uploads, addUpload, uploadsMeta, statistics, exchanges, paired, orphans, unProcessed, gainMap
+        uploads, addUpload, uploadsMeta, statistics, exchanges, paired, orphans, unProcessed, gainMap, rejected, salesList
     }
 }
 

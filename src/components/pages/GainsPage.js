@@ -6,98 +6,51 @@ import PaperBoxAlert from "../layout/PaperBoxAlert";
 import SalesGrid from "../grids/SalesGrid";
 
 const GainsPage = ({files}) => {
-    const {gainMap} = files;
-    const [rejected, setRejected] = useState([]);
+    const {gainMap, rejected, salesList} = files;
+    const [rejectedDetails, setRejectedDetails] = useState([]);
     const [currenciesStatus, setCurrenciesStatus] = useState([])
-    const [salesDetails, setSalesDetails] = useState([]);
 
     useEffect(() => {
-        setRejected(gainMap.rejected.reduce((prev,curr,index) => {
+        setRejectedDetails(rejected.reduce((prev,curr,index) => {
             Object.keys(curr.pair).forEach(currency => {
                 prev.push({error: curr.error, groupId: index, ...curr.pair[currency]});
             });
             return prev;
         }, []));
 
-        setCurrenciesStatus(Object.keys(gainMap.map).map(currency => ({
+        setCurrenciesStatus(Object.keys(gainMap).map(currency => ({
             currency: currency,
-            gains: gainMap.map[currency].gains,
-            fees: gainMap.map[currency].fees,
-            purchaseCount: gainMap.map[currency].purchases.length,
-            salesCount: gainMap.map[currency].sales.length,
-            purchased: cleanFloat(gainMap.map[currency].purchased),
-            sold: cleanFloat(gainMap.map[currency].sold),
-            balance: cleanFloat(String(gainMap.map[currency].purchased - gainMap.map[currency].sold).slice(0,-1)),
-
+            gains: cleanFloat(gainMap[currency].gains),
+            fees: cleanFloat(gainMap[currency].fees),
+            purchaseCount: gainMap[currency].purchases.length,
+            salesCount: gainMap[currency].sales.length,
+            purchased: cleanFloat(gainMap[currency].purchased),
+            sold: cleanFloat(gainMap[currency].sold),
+            balance: cleanFloat(String(gainMap[currency].purchased - gainMap[currency].sold).slice(0,-1)),
         })));
-
-        const allGains = [];
-        const YTD = {};
-
-        Object.keys(gainMap.map).forEach(currency => {
-            gainMap.map[currency].sales.forEach(({
-                                                     sold,
-                                                     soldAt,
-                                                     soldToDate,
-                                                     cost,
-                                                     gain,
-                                                     gainsToDate,
-                                                     purchaseDates,
-                                                     saleDate
-
-            }) => {
-                if (typeof YTD[currency] === 'undefined') {
-                    YTD[currency] = {};
-                }
-                const year = saleDate.substring(0,4);
-                if (typeof YTD[currency][year] === 'undefined') {
-                    YTD[currency][year] = {
-                        sold: 0.0,
-                        gain: 0.0,
-                    }
-                }
-                YTD[currency][year].sold += sold;
-                YTD[currency][year].gain += gain;
-                allGains.push({
-                    currency,
-                    sold,
-                    soldAt,
-                    soldToDate: cleanFloat(soldToDate),
-                    cost,
-                    gain,
-                    gainsToDate,
-                    purchaseDates,
-                    saleDate,
-                    soldYTD: cleanFloat(YTD[currency][year].sold),
-                    gainYTD: cleanFloat(YTD[currency][year].gain),
-                });
-            });
-        });
-        setSalesDetails(allGains);
-
-    }, [gainMap]);
+    }, [gainMap, rejected]);
 
     return (
         <>
             <PaperBoxAlert
-                title={'Rejected Transactions ' + (!!rejected.length ? '(' + rejected.length + ')' : '')}
-                info={rejected.length ? '' : 'No rejected items'}
+                title={'Rejected Transactions ' + (!!rejectedDetails.length ? '(' + rejectedDetails.length + ')' : '')}
+                info={rejectedDetails.length ? '' : 'No rejected items'}
             >
-                {(!!rejected.length) && <ExchangeGrid exchanges={rejected} extra={[{field: 'error'},{field: 'groupId'}]} />}
+                {(!!rejectedDetails.length) && <ExchangeGrid exchanges={rejectedDetails} extra={[{field: 'error'},{field: 'groupId'}]} />}
             </PaperBoxAlert>
 
             <PaperBoxAlert
-                title={'Currencies Stats ' + (!!rejected.length ? '(' + rejected.length + ')' : '')}
+                title={'Currencies Stats ' + (!!currenciesStatus.length ? '(' + currenciesStatus.length + ')' : '')}
                 info={currenciesStatus.length ?  '' : 'No Currency Found'}
             >
                 {(!!currenciesStatus.length) && <CurrenciesStatsGrid currenciesStatus={currenciesStatus}/>}
             </PaperBoxAlert>
 
             <PaperBoxAlert
-                title={'Sales Details ' + (!!salesDetails.length ? '(' + salesDetails.length + ')' : '')}
-                info={salesDetails.length ?  '' : 'No Sales Found'}
+                title={'Sales Details ' + (!!salesList.length ? '(' + salesList.length + ')' : '')}
+                info={salesList.length ?  '' : 'No Sales Found'}
             >
-                {(!!salesDetails.length) && <SalesGrid salesDetails={salesDetails} />}
+                {(!!salesList.length) && <SalesGrid salesList={salesList} />}
             </PaperBoxAlert>
 
 

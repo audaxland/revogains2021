@@ -1,5 +1,6 @@
-import {useEffect, useState, useRef, useCallback} from "react";
+import {useEffect, useState, useRef} from "react";
 import { AgGridReact } from 'ag-grid-react';
+import {resizeGrid} from "./gridHelper";
 
 
 const CurrenciesStatsGrid = ({currenciesStatus}) => {
@@ -27,21 +28,12 @@ const CurrenciesStatsGrid = ({currenciesStatus}) => {
         resizable: true,
     });
 
-    const onGridReady = useCallback((params) => {
+    useEffect(() => resizeGrid(gridRef), [currenciesStatus]);
 
-    }, []);
-
-    const resize = () => {
-        const allColumnIds = [];
-        gridRef.current.columnApi.getAllColumns().forEach((column) => {
-            allColumnIds.push(column.getId());
-        });
-        gridRef.current.columnApi.autoSizeColumns(allColumnIds, true);
-    }
 
     return (
         <>
-            <button onClick={resize} style={{width: '100%'}}>Auto Resize</button>
+            <button onClick={() => resizeGrid(gridRef)} style={{width: '100%'}}>Auto Resize</button>
             <div className="ag-theme-alpine" style={{height: 68 + (currenciesStatus.length * 41),}}>
 
                 <AgGridReact
@@ -49,7 +41,6 @@ const CurrenciesStatsGrid = ({currenciesStatus}) => {
                     rowData={currenciesStatus}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
-                    onGridReady={onGridReady}
                     skipHeaderOnAutoSize={true}
                     enableCellTextSelection={true}
                 />

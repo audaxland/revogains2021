@@ -1,4 +1,4 @@
-import {Folder, Home, QueryStats, CurrencyExchange, CompareArrows, Balance} from "@mui/icons-material";
+import {Folder, Home, QueryStats, CurrencyExchange, CompareArrows, Balance, FileDownload} from "@mui/icons-material";
 
 const menuItems = [
     {icon: <Home />, text: "Home", toPage: 'home'},
@@ -7,6 +7,7 @@ const menuItems = [
     {icon: <CurrencyExchange />, text: "Exchanges", toPage: 'exchanges'},
     {icon: <CompareArrows />, text: "Transactions", toPage: 'transactions'},
     {icon: <Balance />, text: "Gains", toPage: 'gains'},
+    {icon: <FileDownload />, text: "Exports", toPage: 'exports'},
 ];
 
 export default menuItems;
