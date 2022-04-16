@@ -52,7 +52,7 @@ const AddFilterForm = ({fieldsDetails, setFilters}) => {
                     </Select>
                 </FormControl>
                 <FormControl>
-                    <TextField labelId="select-rule" label='Value' value={value} onChange={e => setValue(e.target.value)}/>
+                    <TextField label='Value' value={value} onChange={e => setValue(e.target.value)}/>
                 </FormControl>
             </FormGroupBox>
             <FormGroupBox>

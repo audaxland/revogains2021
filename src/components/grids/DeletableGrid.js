@@ -14,13 +14,13 @@ const DeletableGrid = ({rows, columns, setRows, emptyMessage = 'Nothing yet'}) =
 
     useEffect(() => {
         setColumnState([
-            ...columns.map(({field, headerName = undefined}) => ({field, headerName})),
+            ...columns.map(({field, headerName = undefined, cellRenderer}) => ({field, headerName, cellRenderer})),
             {
                 headerName: 'Remove',
                 cellRenderer: params => (<IconButton onClick={deleteItem(params.data)}><Delete /></IconButton>)
             }
         ]);
-        gridRef?.current?.columnApi?.autoSizeAllColumns(false);
+        setTimeout(() => gridRef?.current?.columnApi?.autoSizeAllColumns(false), 1);
     }, [rows]);
 
 

@@ -8,13 +8,14 @@ const OptionSetting = ({
     defaultValue = '',
     pattern = null,
     name,
-    order= 10
+    order= 10,
+    withoutValue = false
 }) => {
     const [checked, setChecked] = useState(false);
     const [value, setValue] = useState(String(defaultValue));
 
     useEffect(() => {
-        update(name, checked && value.length ? {name, value, order} : null);
+        update(name, checked && (value.length || withoutValue) ? {name, value, order} : null);
     }, [checked, value]);
 
     const handleCheckChange = e => {
@@ -25,7 +26,7 @@ const OptionSetting = ({
         if (!checked) return;
         const newValue = e.target.value;
 
-        if (newValue.length && pattern && (!(new RegExp('^' + pattern + '$')).test(newValue))) {
+        if (newValue.length && pattern && (!(new RegExp('^' + pattern + '$', 'i')).test(newValue))) {
             return false;
         }
         setValue(newValue);
@@ -34,7 +35,9 @@ const OptionSetting = ({
     return (
         <FormGroupBox>
             <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheckChange}/>} label={label} />
-            <TextField value={value} onChange={handelValueChange} disabled={!checked} />
+            {(!withoutValue) && (
+                <TextField value={value} onChange={handelValueChange} disabled={!checked} />
+            )}
         </FormGroupBox>
     )
 }

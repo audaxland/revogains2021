@@ -7,6 +7,14 @@ import AddFilterForm from "./AddFilterForm";
 import DeletableGrid from "../../grids/DeletableGrid";
 import generateExportCsv from "../../../lib/generateExportCsv";
 
+const FormatRender = ({value}) => {
+    if ((!value) || (!value.length)) {
+        return <span>Raw Data</span>
+    }
+    return (
+        <span>{value.map(({name, value: optionValue}) => name + ': ' + optionValue).join(' | ')}</span>
+    )
+}
 
 const ExportsPage = ({files}) => {
     const { salesList } = files;
@@ -16,7 +24,11 @@ const ExportsPage = ({files}) => {
     const fieldsDetails = useMemo(() => salesList[0] ? getFieldsDetails(salesList[0]) : [], [salesList]);
 
     const filterColumns = [ {field: 'field', headerName: 'Filter Field'}, {field: 'operator'}, {field: 'value'}]
-    const fieldsListColumns = [ {field: 'field'}, {field: 'name'}];
+    const fieldsListColumns = [
+        {field: 'field'},
+        {field: 'name'},
+        {field: 'formatOptions', cellRenderer: FormatRender}
+    ];
 
     const exportToCsv = e => {
         generateExportCsv({dataSource: salesList, fields: fieldsList, filters});

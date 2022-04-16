@@ -1,17 +1,34 @@
 import Papa from 'papaparse';
-import {FORMAT_MULTIPLY, FORMAT_ROUND} from "../constants";
+import {
+    FORMAT_DATE,
+    FORMAT_DATE_MULTI_FIRST,
+    FORMAT_DATE_MULTI_LAST,
+    FORMAT_DATE_MULTI_TEXT,
+    FORMAT_MULTIPLY,
+    FORMAT_ROUND
+} from "./constants";
 import moment from "moment";
 
-const formatField = (fieldValue, fromatOptions) => {
-    if (!fromatOptions) return fieldValue;
-    return fromatOptions.reduce((prev, curr) => {
+const formatField = (fieldValue, formatOptions) => {
+    if (!formatOptions) return fieldValue;
+    return formatOptions.reduce((prev, curr) => {
         switch (curr.name) {
             case FORMAT_MULTIPLY:
                 return Number(prev) * Number(curr.value);
             case FORMAT_ROUND:
                 return parseFloat(prev).toFixed(curr.value);
+            case FORMAT_DATE:
+                return prev.split(',').map(item => moment(item).isValid() ? moment(item).format(curr.value) : prev).join(',');
+            case FORMAT_DATE_MULTI_FIRST:
+                return prev.split(',')[0];
+            case FORMAT_DATE_MULTI_LAST:
+                return prev.split(',').pop();
+            case FORMAT_DATE_MULTI_TEXT:
+                return prev.split(',').length > 1 ? curr.value : prev;
+            default:
+                return prev;
         }
-    }, fieldValue);
+    }, Array.isArray(fieldValue) ? fieldValue.join(',') : fieldValue);
 
 }
 
