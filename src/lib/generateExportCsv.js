@@ -1,4 +1,19 @@
 import Papa from 'papaparse';
+import {FORMAT_MULTIPLY, FORMAT_ROUND} from "../constants";
+import moment from "moment";
+
+const formatField = (fieldValue, fromatOptions) => {
+    if (!fromatOptions) return fieldValue;
+    return fromatOptions.reduce((prev, curr) => {
+        switch (curr.name) {
+            case FORMAT_MULTIPLY:
+                return Number(prev) * Number(curr.value);
+            case FORMAT_ROUND:
+                return parseFloat(prev).toFixed(curr.value);
+        }
+    }, fieldValue);
+
+}
 
 const makeExportData = ({dataSource, fields, filters}) => {
     const dataFiltered = dataSource.filter(row => {
@@ -16,8 +31,8 @@ const makeExportData = ({dataSource, fields, filters}) => {
         return true;
     });
 
-    return dataFiltered.map(row => fields.reduce((prev, {field, name}) => {
-        prev[name] = row[field];
+    return dataFiltered.map(row => fields.reduce((prev, {field, name, formatOptions}) => {
+        prev[name] = formatField(row[field], formatOptions);
         return prev;
     }, {}))
 }
@@ -29,7 +44,7 @@ const generateExportCsv = ({dataSource, fields, filters}) => {
 
     const tag = document.createElement('a');
     tag.href = url;
-    tag.setAttribute('download', 'testfile.txt');
+    tag.setAttribute('download', 'RevoGainExport_' + (moment().format('YYYY-MM-DD_HH-mm-ss')) + '.csv');
     tag.click();
 
 

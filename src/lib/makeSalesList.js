@@ -14,7 +14,8 @@ const makeSalesList = gainMap => {
             gainsToDate,
             purchaseDates,
             saleDate,
-            referenceCurrency
+            saleDateTime,
+            referenceCurrency,
         }) => {
             if (typeof YTD[currency] === 'undefined') {
                 YTD[currency] = {};
@@ -38,6 +39,7 @@ const makeSalesList = gainMap => {
                 gainsToDate,
                 purchaseDates,
                 saleDate,
+                saleDateTime,
                 soldYTD: cleanFloat(YTD[currency][year].sold),
                 gainYTD: cleanFloat(YTD[currency][year].gain),
                 referenceCurrency,

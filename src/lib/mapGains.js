@@ -26,6 +26,8 @@ const computeGain = ({paired, purchases, saleId, referenceCurrency}) => {
         feeValue: purchase.feeValue,
         purchaseDates: [...purchase.purchaseDates],
         saleDate: sale[currency]['Completed Date'].slice(0,10),
+        saleDateTime: sale[currency]['Completed Date'],
+        referenceCurrency,
     };
 }
 

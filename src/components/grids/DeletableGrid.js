@@ -17,7 +17,7 @@ const DeletableGrid = ({rows, columns, setRows, emptyMessage = 'Nothing yet'}) =
             ...columns.map(({field, headerName = undefined}) => ({field, headerName})),
             {
                 headerName: 'Remove',
-                cellRenderer: params => console.log(params) || (<IconButton onClick={deleteItem(params.data)}><Delete /></IconButton>)
+                cellRenderer: params => (<IconButton onClick={deleteItem(params.data)}><Delete /></IconButton>)
             }
         ]);
         gridRef?.current?.columnApi?.autoSizeAllColumns(false);

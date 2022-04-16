@@ -1,9 +1,9 @@
 import {FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
 
-const FieldsSelect = ({fieldsDetails, value, onChange, label= 'Choose a field'}) => {
+const FieldsSelect = ({fieldsDetails, value, onChange, label= 'Choose a field', sx = {}}) => {
 
     return (
-        <FormControl sx={{minWidth: '15em'}} >
+        <FormControl sx={{minWidth: '15em', ...sx}} >
             <InputLabel
                 id="select-field"
                 sx={{background: 'white', padding: '0 0.5em'}}
