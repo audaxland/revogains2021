@@ -7,6 +7,7 @@ import ExchangePage from "./pages/ExchangePage";
 import TransactionsPage from "./pages/TransactionsPage";
 import GainsPage from "./pages/GainsPage";
 import ExportsPage from "./pages/ExportPage/ExportsPage";
+import TaxPage from "./pages/TaxPage";
 
 const Router = ({page, files}) => {
     const currentPage = menuItems.find(item => item.toPage === page);
@@ -38,6 +39,7 @@ const Router = ({page, files}) => {
                 {(page === 'transactions') && <TransactionsPage files={files} />}
                 {(page === 'gains') && <GainsPage files={files} />}
                 {(page === 'exports') && <ExportsPage files={files} />}
+                {(page === 'tax') && <TaxPage files={files} />}
             </Box>
 
         </Paper>
