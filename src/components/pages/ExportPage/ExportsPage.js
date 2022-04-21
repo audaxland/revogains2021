@@ -6,6 +6,7 @@ import getFieldsDetails from "./getFieldsDetails";
 import AddFilterForm from "./AddFilterForm";
 import DeletableGrid from "../../grids/DeletableGrid";
 import generateExportCsv from "../../../lib/generateExportCsv";
+import AddOrderByForm from "./AddOrderByForm";
 
 const FormatRender = ({value}) => {
     if ((!value) || (!value.length)) {
@@ -20,6 +21,7 @@ const ExportsPage = ({files}) => {
     const { salesList } = files;
     const [fieldsList, setFieldsList] = useState([]);
     const [filters, setFilters] = useState([]);
+    const [orderBy, setOderBy] = useState([])
 
     const fieldsDetails = useMemo(() => salesList[0] ? getFieldsDetails(salesList[0]) : [], [salesList]);
 
@@ -29,9 +31,11 @@ const ExportsPage = ({files}) => {
         {field: 'name'},
         {field: 'formatOptions', cellRenderer: FormatRender}
     ];
+    const orderByColumns = [ {field: 'field', headerName: 'Filter Field'}, {field: 'direction'}, {field: 'priority'}]
+
 
     const exportToCsv = e => {
-        generateExportCsv({dataSource: salesList, fields: fieldsList, filters});
+        generateExportCsv({dataSource: salesList, fields: fieldsList, filters, orderBy});
     }
 
     return (
@@ -62,6 +66,18 @@ const ExportsPage = ({files}) => {
                     rows={filters}
                     setRows={setFilters}
                     columns={filterColumns}
+                />
+            </PaperBoxAlert>
+
+            <PaperBoxAlert
+                title="Sort By field"
+            >
+                <AddOrderByForm fieldsDetails={fieldsDetails} setOderBy={setOderBy} />
+                <Divider />
+                <DeletableGrid
+                    rows={orderBy}
+                    setRows={setOderBy}
+                    columns={orderByColumns}
                 />
             </PaperBoxAlert>
 

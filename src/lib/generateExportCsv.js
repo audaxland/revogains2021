@@ -5,7 +5,7 @@ import {
     FORMAT_DATE_MULTI_LAST,
     FORMAT_DATE_MULTI_TEXT,
     FORMAT_MULTIPLY,
-    FORMAT_ROUND
+    FORMAT_ROUND, SORT_ASC
 } from "./constants";
 import moment from "moment";
 
@@ -29,10 +29,21 @@ const formatField = (fieldValue, formatOptions) => {
                 return prev;
         }
     }, Array.isArray(fieldValue) ? fieldValue.join(',') : fieldValue);
-
 }
 
-const makeExportData = ({dataSource, fields, filters}) => {
+const sortFunction = orderBy => (a,b) => {
+    for (const {field, direction, priority} of orderBy) {
+        if (a[field] < b[field]) {
+            return direction === SORT_ASC ? -1 : 1;
+        }
+        if (a[field] > b[field]) {
+            return direction === SORT_ASC ? 1 : -1;
+        }
+    }
+    return 0;
+}
+
+export const makeExportData = ({dataSource, fields, filters, orderBy}) => {
     const dataFiltered = dataSource.filter(row => {
         for (const {field, operator, value} of filters) {
             if ((operator === '=') && (row[field] != value)) return false;
@@ -48,14 +59,18 @@ const makeExportData = ({dataSource, fields, filters}) => {
         return true;
     });
 
+    if (orderBy) {
+        dataFiltered.sort(sortFunction(orderBy));
+    }
+
     return dataFiltered.map(row => fields.reduce((prev, {field, name, formatOptions}) => {
         prev[name] = formatField(row[field], formatOptions);
         return prev;
     }, {}))
 }
 
-const generateExportCsv = ({dataSource, fields, filters}) => {
-    const exportData = makeExportData({dataSource, fields, filters});
+const generateExportCsv = ({dataSource, fields, filters, orderBy}) => {
+    const exportData = makeExportData({dataSource, fields, filters, orderBy});
     const blob = new Blob([Papa.unparse(exportData)], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
 
