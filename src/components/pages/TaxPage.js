@@ -22,7 +22,7 @@ const TaxPage = ({files}) => {
             .sort((a,b) => a.saleDateTime < b.saleDateTime ? -1 : 1)
             .map(row => ({
                 a: row.sold + ' ' + row.currency,
-                b: row.purchaseDates.length > 1 ? 'various' : moment(row.purchaseDates[0]).format('MM/DD/YYYY'),
+                b: row.purchaseDates.length > 1 ? 'VARIOUS' : moment(row.purchaseDates[0]).format('MM/DD/YYYY'),
                 c: moment(row.saleDate).format('MM/DD/YYYY'),
                 d: (Number(row.soldAt) * Number(rate)).toFixed(2),
                 e: (Number(row.cost) * Number(rate)).toFixed(2),
@@ -61,6 +61,7 @@ const TaxPage = ({files}) => {
             shortTermCheckbox: 'C',
             shortTermRows,
             shortTermTotals,
+            fileName: 'form8949_2021_page' + page.pageNo + '_' + (moment().format('YYYY-MM-DD_HH-mm-ss')) +'.pdf',
         });
     }, [name, ssn, shortTermData])
 

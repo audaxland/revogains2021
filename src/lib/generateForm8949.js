@@ -1,6 +1,14 @@
 import {PDFDocument} from 'pdf-lib';
 import moment from "moment";
 
+const formatIfNegative = value => {
+    if (Number.isNaN(Number(value))) return value;
+    if (Number(value) < 0) {
+        return '(' + String(value).replace('-', '') + ')';
+    }
+    return value
+}
+
 /***
  * Fill the pdf form with the provided data
  * @param form {PDFForm} form read from the pdf document
@@ -38,7 +46,7 @@ export const  populateForm8949 = async ({
         columns.forEach((key, keyIndex) => {
             if (typeof row[key] !== 'undefined') {
                 const cellName = rowName +'[0].f1_' + (rowReference + keyIndex) + '[0]';
-                form.getTextField(cellName).setText(row[key]);
+                form.getTextField(cellName).setText(formatIfNegative(row[key]));
             }
         });
     });
@@ -48,7 +56,7 @@ export const  populateForm8949 = async ({
         const cellNumber = 115 + keyIndex;
         if (typeof shortTermTotals[key] !== 'undefined') {
             form.getTextField('topmostSubform[0].Page1[0].f1_' + cellNumber + '[0]')
-                .setText(shortTermTotals[key]);
+                .setText(formatIfNegative(shortTermTotals[key]));
         }
     });
 
@@ -68,7 +76,7 @@ export const  populateForm8949 = async ({
         columns.forEach((key, keyIndex) => {
             if (typeof row[key] !== 'undefined') {
                 const cellName = rowName +'[0].f2_' + (rowReference + keyIndex) + '[0]';
-                form.getTextField(cellName).setText(row[key]);
+                form.getTextField(cellName).setText(formatIfNegative(row[key]));
             }
         });
     });
@@ -78,7 +86,7 @@ export const  populateForm8949 = async ({
         const cellNumber = 115 + keyIndex;
         if (typeof longTermTotals[key] !== 'undefined') {
             form.getTextField('topmostSubform[0].Page2[0].f2_' + cellNumber + '[0]')
-                .setText(longTermTotals[key]);
+                .setText(formatIfNegative(longTermTotals[key]));
         }
     });
 
@@ -98,7 +106,7 @@ export const  populateForm8949 = async ({
  * @returns {Promise<void>}
  */
 export const  generateForm8949 = async ({
-    name = '', ssn = '',
+    name = '', ssn = '', fileName = null,
     shortTermCheckbox = '', shortTermRows = [], shortTermTotals = {},
     longTermCheckbox = '', longTermRows = [], longTermTotals = {}
 }) => {
@@ -114,19 +122,20 @@ export const  generateForm8949 = async ({
     });
 
     const pdfBytes = await pdfDoc.save();
-    downloadPdf(pdfBytes);
+    downloadPdf(pdfBytes, fileName);
 }
 
 /**
  * cause the browser to download a blob as a pdf file
  * @param content {BlobPart} binary data of the pdf file
  */
-export const downloadPdf = content => {
+export const downloadPdf = (content, fileName = null) => {
     const blob = new Blob([content], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
 
     const tag = document.createElement('a');
     tag.href = url;
-    tag.setAttribute('download', 'RevoGainExport_' + (moment().format('YYYY-MM-DD_HH-mm-ss')) + '.csv');
+    const exportFileName = fileName ? fileName : 'RevoExport_' + (moment().format('YYYY-MM-DD_HH-mm-ss')) + '.pdf'
+    tag.setAttribute('download', exportFileName);
     tag.click();
 }
