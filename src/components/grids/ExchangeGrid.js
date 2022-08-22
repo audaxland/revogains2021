@@ -25,7 +25,7 @@ const ExchangeGrid = ({exchanges, extra = []}) => {
 
     useEffect(() => {
         setColumnDefs([...extra, ...initialColumns]);
-    }, []);
+    }, [extra, initialColumns]);
 
     const [defaultColDef] = useState({
         filter: 'agTextColumnFilter',

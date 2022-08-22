@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import SimpleGrid from "./SimpleGrid";
@@ -19,7 +19,7 @@ const DeletableGrid = ({rows, columns, setRows, emptyMessage = 'Nothing yet'}) =
                 cellRenderer: params => (<IconButton onClick={deleteItem(params.data)}><Delete /></IconButton>)
             }
         ]);
-    }, [rows, setRows]);
+    }, [columns, rows, setRows]);
 
 
     return (
