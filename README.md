@@ -10,11 +10,19 @@ Once the files uploaded, the app will attempt to match all the transactions
 and calculate the gains on each sale of non-euro currencies.  
 The gains are calculated on the basses of first in first out.
 
+# Live App
+
+If you just want to run the web apps, it is deployed at https://revogain.audaxland.net.
 
 # Run the app
 
 To run the app, you can clone the repo and start it locally using
 
-### `npm start`
+```
+git clone https://github.com/audaxland/revogains.git
+cd revogains
+npm i
+npm start
+```
 
 
