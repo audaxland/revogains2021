@@ -19,7 +19,7 @@ const DeletableGrid = ({rows, columns, setRows, emptyMessage = 'Nothing yet'}) =
                 cellRenderer: params => (<IconButton onClick={deleteItem(params.data)}><Delete /></IconButton>)
             }
         ]);
-    }, [columns, rows, setRows]);
+    }, [rows, setRows]);
 
 
     return (

@@ -16,7 +16,7 @@ const OptionSetting = ({
 
     useEffect(() => {
         update(name, checked && (value.length || withoutValue) ? {name, value, order} : null);
-    }, [checked, value, name, value, order]);
+    }, [checked, value]);
 
     const handleCheckChange = e => {
         setChecked(e.target.checked);
