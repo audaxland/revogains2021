@@ -1,3 +1,6 @@
+# App Deprecated... 
+This app is deprecated, please see the new version at https://github.com/audaxland/revoScope
+
 # RevoGains - About this Web App...
 
 I created this app to calculate my capital gains on trading between euros and cryptocurrencies on my revolut account.
@@ -9,10 +12,6 @@ The statements needs to be downloaded as a csv file and uploaded in the app on t
 Once the files uploaded, the app will attempt to match all the transactions 
 and calculate the gains on each sale of non-euro currencies.  
 The gains are calculated on the basses of first in first out.
-
-# Live App
-
-If you just want to run the web apps, it is deployed at https://revogain.audaxland.net.
 
 # Run the app
 
