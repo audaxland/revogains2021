@@ -18,7 +18,7 @@ The gains are calculated on the basses of first in first out.
 To run the app, you can clone the repo and start it locally using
 
 ```
-git clone https://github.com/audaxland/revogains.git
+git clone https://github.com/audaxland/revogains2021.git
 cd revogains
 npm i
 npm start
